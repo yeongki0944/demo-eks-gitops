@@ -8,6 +8,8 @@ defaultNodePool:
     - t3.medium
     - t3.large
     - m5.large
+    - t3.xlarge   
+    - m5.xlarge  
   capacityType:
     - on-demand
   cpuLimit: "20"
