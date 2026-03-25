@@ -6,7 +6,7 @@ metadata:
 spec:
   project: platform
   source:
-    repoURL: https://github.com/your-org/demo-eks-gitops.git  # ★ 변경
+    repoURL: https://github.com/yeongki0944/demo-eks-gitops.git  # ★ 변경
     targetRevision: main
     path: charts/karpenter
   destination:
