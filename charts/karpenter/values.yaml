@@ -1,0 +1,17 @@
+# ★ terraform output에서 1회 복사한 정적값
+clusterName: demo-dev-cluster
+karpenterNodeRoleName: demo-dev-cluster-karpenter-node   # REPLACE
+
+# Default NodePool 설정
+defaultNodePool:
+  instanceTypes:
+    - t3.medium
+    - t3.large
+    - m5.large
+  capacityType:
+    - on-demand
+  cpuLimit: "20"
+  memoryLimit: "40Gi"
+  diskSize: 30Gi
+  expireAfter: 720h
+  consolidateAfter: 30m

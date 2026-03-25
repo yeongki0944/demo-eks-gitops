@@ -1,0 +1,66 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: loki
+  namespace: argocd
+spec:
+  project: platform
+  source:
+    repoURL: https://grafana.github.io/helm-charts
+    chart: loki
+    targetRevision: 6.24.0
+    helm:
+      values: |
+        # ★ terraform output에서 1회 복사한 정적값
+        serviceAccount:
+          annotations:
+            eks.amazonaws.com/role-arn: "REPLACE_WITH_LOKI_IRSA_ARN"
+
+        loki:
+          storage:
+            type: s3
+            s3:
+              region: ap-southeast-1
+              bucketnames: "REPLACE_WITH_LOKI_CHUNKS_BUCKET"
+            bucketNames:
+              chunks: "REPLACE_WITH_LOKI_CHUNKS_BUCKET"
+              ruler: "REPLACE_WITH_LOKI_RULER_BUCKET"
+
+          schemaConfig:
+            configs:
+              - from: "2024-01-01"
+                store: tsdb
+                object_store: s3
+                schema: v13
+                index:
+                  prefix: loki_index_
+                  period: 24h
+
+        # Single Binary 모드 (dev용)
+        singleBinary:
+          replicas: 1
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+
+        # Gateway
+        gateway:
+          enabled: true
+
+        # 불필요한 컴포넌트 비활성화
+        read:
+          replicas: 0
+        write:
+          replicas: 0
+        backend:
+          replicas: 0
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: loki
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

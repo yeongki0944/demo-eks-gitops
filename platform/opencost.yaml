@@ -1,0 +1,46 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: opencost
+  namespace: argocd
+spec:
+  project: platform
+  source:
+    repoURL: https://opencost.github.io/opencost-helm-chart
+    chart: opencost
+    targetRevision: 1.42.0
+    helm:
+      values: |
+        # ★ terraform output에서 1회 복사한 정적값
+        serviceAccount:
+          annotations:
+            eks.amazonaws.com/role-arn: "REPLACE_WITH_OPENCOST_IRSA_ARN"
+
+        opencost:
+          exporter:
+            defaultClusterId: demo-dev-cluster
+            aws:
+              spot_data_region: ap-southeast-1
+
+          prometheus:
+            internal:
+              serviceName: prometheus-kube-prometheus-prometheus
+              namespaceName: monitoring
+              port: 9090
+
+          ui:
+            enabled: true
+
+        resources:
+          requests:
+            cpu: 50m
+            memory: 128Mi
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: monitoring
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
