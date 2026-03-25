@@ -11,6 +11,8 @@ spec:
     targetRevision: 8.8.4
     helm:
       values: |
+        deploymentStrategy:
+          type: Recreate
         persistence:
           enabled: true
           storageClassName: gp3
