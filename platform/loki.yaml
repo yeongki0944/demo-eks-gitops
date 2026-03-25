@@ -14,17 +14,17 @@ spec:
         # ★ terraform output에서 1회 복사한 정적값
         serviceAccount:
           annotations:
-            eks.amazonaws.com/role-arn: "REPLACE_WITH_LOKI_IRSA_ARN"
+            eks.amazonaws.com/role-arn: "arn:aws:iam::626635430480:role/demo-dev-cluster-loki"
 
         loki:
           storage:
             type: s3
             s3:
               region: ap-southeast-1
-              bucketnames: "REPLACE_WITH_LOKI_CHUNKS_BUCKET"
+              bucketnames: "loki-demo-dev-chunks"
             bucketNames:
-              chunks: "REPLACE_WITH_LOKI_CHUNKS_BUCKET"
-              ruler: "REPLACE_WITH_LOKI_RULER_BUCKET"
+              chunks: "loki-demo-dev-chunks"
+              ruler: "loki-demo-dev-ruler"
 
           schemaConfig:
             configs:

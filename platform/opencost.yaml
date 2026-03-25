@@ -14,7 +14,7 @@ spec:
         # ★ terraform output에서 1회 복사한 정적값
         serviceAccount:
           annotations:
-            eks.amazonaws.com/role-arn: "REPLACE_WITH_OPENCOST_IRSA_ARN"
+            eks.amazonaws.com/role-arn: "arn:aws:iam::626635430480:role/demo-dev-cluster-opencost"
 
         opencost:
           exporter:
